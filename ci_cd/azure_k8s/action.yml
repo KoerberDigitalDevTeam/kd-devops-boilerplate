@@ -1,10 +1,12 @@
 name: 'Rollout kubernetes deployment'
 description: 'A GitHub Action that will rollout restart a deployment in kubernetes'
 inputs:
+  azure_credentials:
+    description: 'Credentials to login into azure'
+    required: true
   cluster_name:
     description: 'Name of the cluster in azure'
     required: true
-    #default: ""
   resource_group:
     description: 'Name of the resource group of the aks cluster'
     required: true
@@ -28,6 +30,11 @@ runs:
         brew update
         brew upgrade Azure/kubelogin/kubelogin
 
+    - name: Log in with Azure
+      uses: azure/login@v1.4.7
+      with:
+        creds: ${{ inputs.azure_credentials }}
+
     - name: Get Cluster Credentials
       shell: bash
       run: |
@@ -40,3 +47,8 @@ runs:
       run: |
         export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
         kubectl rollout restart deploy ${{ inputs.deploy }} --namespace ${{ inputs.namespace }}
+
+    - name: logout
+      run: |
+        az logout
+      if: always()
