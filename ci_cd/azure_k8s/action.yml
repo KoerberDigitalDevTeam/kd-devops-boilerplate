@@ -17,11 +17,11 @@ inputs:
   namespace:
     description: 'Namespace of the deployment to restart'
     required: true
-outputs:
 runs:
   using: 'composite'
   steps:
     - name: Install Brew and kubelogin
+      shell: bash
       run: |
         export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
         brew install Azure/kubelogin/kubelogin
@@ -29,12 +29,14 @@ runs:
         brew upgrade Azure/kubelogin/kubelogin
 
     - name: Get Cluster Credentials
+      shell: bash
       run: |
         export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
         az aks get-credentials -n ${{ inputs.cluster_name }} -g ${{ inputs.resource_group }} --overwrite-existing --subscription ${{ inputs.subscription }}
         kubelogin convert-kubeconfig -l azurecli
         
     - name: Redeploy app
+      shell: bash
       run: |
         export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
         kubectl rollout restart deploy ${{ inputs.deploy }} --namespace ${{ inputs.namespace }}
