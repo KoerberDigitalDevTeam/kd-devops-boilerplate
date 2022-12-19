@@ -49,6 +49,7 @@ runs:
         kubectl rollout restart deploy ${{ inputs.deploy }} --namespace ${{ inputs.namespace }}
 
     - name: logout
+      shell: bash
       run: |
         az logout
       if: always()
