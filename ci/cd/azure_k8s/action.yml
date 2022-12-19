@@ -1,0 +1,40 @@
+name: 'Rollout kubernetes deployment'
+description: 'A GitHub Action that will rollout restart a deployment in kubernetes'
+inputs:
+  cluster_name:
+    description: 'Name of the cluster in azure'
+    required: true
+    #default: ""
+  resource_group:
+    description: 'Name of the resource group of the aks cluster'
+    required: true
+  subscription:
+    description: 'Id of the subscription of the aks cluster'
+    required: true
+  deploy:
+    description: 'Name of the deployment to restart'
+    required: true
+  namespace:
+    description: 'Namespace of the deployment to restart'
+    required: true
+outputs:
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Brew and kubelogin
+      run: |
+        export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
+        brew install Azure/kubelogin/kubelogin
+        brew update
+        brew upgrade Azure/kubelogin/kubelogin
+
+    - name: Get Cluster Credentials
+      run: |
+        export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
+        az aks get-credentials -n ${{ inputs.cluster_name }} -g ${{ inputs.resource_group }} --overwrite-existing --subscription ${{ inputs.subscription }}
+        kubelogin convert-kubeconfig -l azurecli
+        
+    - name: Redeploy app
+      run: |
+        export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
+        kubectl rollout restart deploy ${{ inputs.deploy }} --namespace ${{ inputs.namespace }}
