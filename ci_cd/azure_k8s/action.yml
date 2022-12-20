@@ -4,6 +4,10 @@ inputs:
   azure_credentials:
     description: 'Credentials to login into azure'
     required: true
+  manifest:
+    description: 'Directory for thek8s manifest'
+    required: true
+    default: ""
   cluster_name:
     description: 'Name of the cluster in azure'
     required: true
@@ -42,6 +46,11 @@ runs:
         az aks get-credentials -n ${{ inputs.cluster_name }} -g ${{ inputs.resource_group }} --overwrite-existing --subscription ${{ inputs.subscription }}
         kubelogin convert-kubeconfig -l azurecli
         
+    - name: (Optional) Run manifest
+      shell: bash
+      run: |
+        if [ -f ${{ inputs.manifest }} ]; then kubectl apply -f ${{ inputs.manifest }} -n ${{ inputs.namespace }} fi
+
     - name: Redeploy app
       shell: bash
       run: |
