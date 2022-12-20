@@ -7,7 +7,7 @@ inputs:
   manifest:
     description: 'Directory for thek8s manifest'
     required: true
-    default: ""
+    default: "/"
   cluster_name:
     description: 'Name of the cluster in azure'
     required: true
