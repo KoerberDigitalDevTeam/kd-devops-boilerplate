@@ -49,7 +49,7 @@ runs:
     - name: (Optional) Run manifest
       shell: bash
       run: |
-        if [ -f ${{ inputs.manifest }} ]; then kubectl apply -f ${{ inputs.manifest }} -n ${{ inputs.namespace }} fi
+        if [ -f ${{ inputs.manifest }} ]; then kubectl apply -f ${{ inputs.manifest }} -n ${{ inputs.namespace }}; fi
 
     - name: Redeploy app
       shell: bash
