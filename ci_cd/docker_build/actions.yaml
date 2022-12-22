@@ -4,6 +4,24 @@ inputs:
   azure_credentials:
     description: 'Credentials to login into azure'
     required: true
+  acr_endpoint:
+    description: 'ACR endpoint'
+    required: true
+  dockerbuild_path:
+    description: 'Path for the dockerfile'
+    required: true
+    default: "."
+  dockerbuild_repo:
+    description: 'Repo inside the container registry'
+    required: true
+  dockerbuild_tag:
+    description: 'Tag for the docker image'
+    required: true
+    default: "latest"
+  dockerbuild_args:
+    description: 'Args for the docker buils. Type: Map'
+    required: true
+    default: '{}'
 runs:
   using: 'docker'
   image: 'Dockerfile'
