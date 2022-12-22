@@ -1,0 +1,9 @@
+name: 'Build and Push Docker'
+description: 'A GitHub Action that will build a docker file and push it to an acr'
+inputs:
+  azure_credentials:
+    description: 'Credentials to login into azure'
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
