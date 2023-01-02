@@ -25,12 +25,10 @@ clientDocker.login(
         password=credentials["clientSecret"],
         registry=acr_endpoint
     )
-try {
+try:
     pushResponse = clientDocker.api.push(
         repository=build_repo_path,
         tag=build_tag,
     )
-}
-except {
+except:
     print(credentials)
-}
