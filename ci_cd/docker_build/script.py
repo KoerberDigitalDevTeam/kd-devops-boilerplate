@@ -22,6 +22,7 @@ clientDocker.images.build(
 
 print(credentials["clientId"])
 print(credentials["clientSecret"])
+print(acr_endpoint)
 try:
     clientDocker.login(
         username=credentials["clientId"],
