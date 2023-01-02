@@ -22,7 +22,7 @@ clientDocker.images.build(
 
 print(credentials["clientId"])
 print(credentials["clientSecret"])
- try:
+try:
     clientDocker.login(
         username=credentials["clientId"],
         password=credentials["clientSecret"],
