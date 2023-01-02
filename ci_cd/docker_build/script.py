@@ -27,7 +27,7 @@ try:
     clientDocker.login(
         username=credentials["clientId"],
         password=credentials["clientSecret"],
-        registry=acr_endpoint
+        registry=build_repo_path
     )
 except:
     print(credentials)
