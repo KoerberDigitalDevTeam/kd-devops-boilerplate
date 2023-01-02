@@ -20,11 +20,17 @@ clientDocker.images.build(
         buildargs=json.loads(build_args)
 )
 
-clientDocker.login(
+print(credentials["clientId"])
+print(credentials["clientSecret"])
+ try:
+    clientDocker.login(
         username=credentials["clientId"],
         password=credentials["clientSecret"],
         registry=acr_endpoint
     )
+except:
+    print(credentials)
+
 # try:
 #     pushResponse = clientDocker.api.push(
 #         repository=build_repo_path,
