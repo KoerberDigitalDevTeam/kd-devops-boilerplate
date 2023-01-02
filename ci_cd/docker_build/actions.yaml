@@ -9,14 +9,12 @@ inputs:
     required: true
   dockerbuild_path:
     description: 'Path for the dockerfile'
-    required: true
     default: "."
   dockerbuild_repo:
     description: 'Repo inside the container registry'
     required: true
   dockerbuild_tag:
     description: 'Tag for the docker image'
-    required: true
     default: "latest"
   dockerbuild_args:
     description: 'Args for the docker buils. Type: Map'
