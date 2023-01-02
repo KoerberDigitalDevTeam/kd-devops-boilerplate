@@ -1,12 +1,13 @@
 import os, docker, json
 acr_endpoint = os.environ['INPUT_ACR_ENDPOINT']
 azure_credentials = os.environ['INPUT_AZURE_CREDENTIALS']
+azure_username = os.environ['INPUT_AZURE_USERNAME']
+azure_password = os.environ['INPUT_AZURE_PASSWORD']
 build_path = os.environ['INPUT_DOCKERBUILD_PATH']
 build_repo = os.environ['INPUT_DOCKERBUILD_REPO']
 build_tag = os.environ['INPUT_DOCKERBUILD_TAG']
 build_args = os.environ['INPUT_DOCKERBUILD_ARGS']
 
-credentials = json.loads(azure_credentials)
 try:
     clientDocker = docker.from_env()
 except:
@@ -20,22 +21,21 @@ clientDocker.images.build(
         buildargs=json.loads(build_args)
 )
 
-print(credentials["clientId"])
-print(credentials["clientSecret"])
-print(acr_endpoint)
-try:
+if azure_credentials != "NULL" :
+    credentials = json.loads(azure_credentials)
     clientDocker.login(
         username=credentials["clientId"],
         password=credentials["clientSecret"],
-        registry=build_repo_path
+        registry=acr_endpoint
     )
-except:
-    print(credentials)
+else:
+    clientDocker.login(
+            username=azure_username,
+            password=azure_password,
+            registry=acr_endpoint
+    )
 
-# try:
-#     pushResponse = clientDocker.api.push(
-#         repository=build_repo_path,
-#         tag=build_tag,
-#     )
-# except:
-#     print(credentials)
+pushResponse = clientDocker.api.push(
+    repository=build_repo_path,
+    tag=build_tag,
+)
