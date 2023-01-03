@@ -23,7 +23,7 @@ inputs:
   dockerbuild_path:
     description: 'Path for the dockerfile'
     default: "."
-    required: false
+    required: true
     type: string
   dockerbuild_repo:
     description: 'Repo inside the container registry'
@@ -32,7 +32,7 @@ inputs:
   dockerbuild_tag:
     description: 'Tag for the docker image'
     default: 'latest'
-    required: false
+    required: true
     type: string
   dockerbuild_args:
     description: 'Args for the docker buils. Type: Map'
