@@ -1,6 +1,10 @@
 import os, docker, json
 acr_endpoint = os.environ['INPUT_ACR_ENDPOINT']
-azure_credentials = os.environ['INPUT_AZURE_CREDENTIALS']
+try:
+    azure_credentials = os.environ['INPUT_AZURE_CREDENTIALS']
+except:
+    azure_credentials = 'NULL'
+    
 azure_username = os.environ['INPUT_AZURE_USERNAME']
 azure_password = os.environ['INPUT_AZURE_PASSWORD']
 build_path = os.environ['INPUT_DOCKERBUILD_PATH']
