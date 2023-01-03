@@ -3,34 +3,42 @@ description: 'A GitHub Action that will build a docker file and push it to an ac
 inputs:
   azure_credentials:
     description: 'Credentials to login into registry. Only use without azure_username'
-    default: "NULL"
+    default: 'NULL'
     required: false
+    type: string
   azure_username:
     description: 'Credentials to login into registry. Only use when azure_credentials is not set'
-    default: "NULL"
+    default: 'NULL'
     required: false
+    type: string
   azure_password:
     description: 'Credentials to login into registry. Only use when azure_credentials is not set'
-    default: "NULL"
+    default: 'NULL'
     required: false
+    type: string
   acr_endpoint:
     description: 'ACR endpoint'
     required: true
+    type: string
   dockerbuild_path:
     description: 'Path for the dockerfile'
     default: "."
     required: false
+    type: string
   dockerbuild_repo:
     description: 'Repo inside the container registry'
     required: true
+    type: string
   dockerbuild_tag:
     description: 'Tag for the docker image'
-    default: "latest"
+    default: 'latest'
     required: false
+    type: string
   dockerbuild_args:
     description: 'Args for the docker buils. Type: Map'
     required: true
     default: '{}'
+    type: string
 runs:
   using: 'docker'
   image: 'Dockerfile'
