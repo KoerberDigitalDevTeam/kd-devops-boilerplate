@@ -3,15 +3,15 @@ description: 'A GitHub Action that will build a docker file and push it to an ac
 inputs:
   azure_credentials:
     description: 'Credentials to login into registry. Only use without azure_username'
-    defaul: "NULL"
+    default: "NULL"
     required: false
   azure_username:
     description: 'Credentials to login into registry. Only use when azure_credentials is not set'
-    defaul: "NULL"
+    default: "NULL"
     required: false
   azure_password:
     description: 'Credentials to login into registry. Only use when azure_credentials is not set'
-    defaul: "NULL"
+    default: "NULL"
     required: false
   acr_endpoint:
     description: 'ACR endpoint'
