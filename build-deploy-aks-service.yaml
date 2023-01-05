@@ -1,0 +1,54 @@
+name: build-deploy-aks-service-boilerplate
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+env:
+  NAMESPACE: "Insert your namespace here"
+  DEPLOYMENT: "Insert the name of th deployment in the aks"
+  DEPLOY_MANIFEST: "Leave empty or add the path to the k8s manifest you want to deply (only files inside the repo are supported)"
+  SUBSCRIPTION: "Insert the subscription on azure"
+
+  IMAGE_NAME: "Name of the repositorie inside the container registry. This will also be used when tagging the docker in order to resolve the docker push"
+  IMAGE_TAG: "Tag for your docker image"
+  CLUSTER_NAME: "Name of the aks cluster"
+  RESOURCE_GROUP: "Azure resource gorup where the aks is created"
+
+# Additional values are used but this are considered sensitive so they should be passed by secret.
+# This values are 
+# REGISTRY_LOGIN_SERVER: "The endpoint of your registry"
+# AZURE_CREDENTIALS: 'Format is {"clientId": "","clientSecret": "","subscriptionId": "","tenantId": ""}'
+# REGISTRY_USERNAME: "Username to login in the container registry"
+# REGISTRY_PASSWORD: "Password to login in the container registry"
+
+jobs:
+  deploy-dev:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v3.1.0
+
+      - name: Build docker and send to acr
+        uses: KoerberDigitalDevTeam/kd-devops-boilerplate/ci_cd/docker_build@v1
+        with:
+          acr_endpoint: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          #azure_credentials: "${{ secrets.AZURE_CREDENTIALS  }}" This is only needed if you want to use a azure service principle to login. Otherwise use azure_username and azure_password instead.
+          azure_username: "${{ secrets.REGISTRY_USERNAME }}"
+          azure_password: "${{ secrets.REGISTRY_PASSWORD }}"
+          dockerbuild_repo: "${{ env.IMAGE_NAME }}"
+          dockerbuild_args: '{}'
+          dockerbuild_path: '.'
+          dockerbuild_tag: "${{ env.IMAGE_TAG }}"
+
+      - name: Redeploy app
+        uses: KoerberDigitalDevTeam/kd-devops-boilerplate/ci_cd/azure_k8s@v1
+        with:
+          cluster_name: "${{ env.CLUSTER_NAME }}"
+          resource_group: "${{ env.RESOURCE_GROUP }}"
+          subscription: "${{ env.SUBSCRIPTION }}"
+          deploy: "${{ env.DEPLOYMENT }}"
+          namespace: "${{ env.NAMESPACE }}"
+          azure_credentials: "${{ secrets.AZURE_CREDENTIALS  }}"
