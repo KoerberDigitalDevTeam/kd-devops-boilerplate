@@ -1,5 +1,5 @@
-name: 'Build and Push Docker'
-description: 'A GitHub Action that will build a docker file and push it to an acr'
+name: 'Retag Docker in repo'
+description: 'A GitHub Action that will retag a docker file and push it to an acr'
 inputs:
   azure_credentials:
     description: 'Credentials to login into registry. Only use without azure_username'
@@ -20,24 +20,23 @@ inputs:
     description: 'ACR endpoint'
     required: true
     type: string
-  dockerbuild_path:
-    description: 'Path for the dockerfile'
-    default: "."
+  docker_old_repo:
+    description: 'Repo inside the container registry to get the image from to retag'
     required: true
     type: string
-  dockerbuild_repo:
-    description: 'Repo inside the container registry'
+  docker_new_repo:
+    description: 'Repo inside the container registry to push the tagged docker'
     required: true
     type: string
-  dockerbuild_tag:
-    description: 'Tag for the docker image'
+  docker_old_tag:
+    description: 'Old tag of the image'
     default: 'latest'
     required: true
     type: string
-  dockerbuild_args:
-    description: 'Args for the docker buils. Type: Map'
+  docker_new_tag:
+    description: 'New tag for the image'
+    default: 'latest'
     required: true
-    default: '{}'
     type: string
 runs:
   using: 'docker'
