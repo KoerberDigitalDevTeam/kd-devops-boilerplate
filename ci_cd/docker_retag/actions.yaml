@@ -1,0 +1,43 @@
+name: 'Retag Docker in repo'
+description: 'A GitHub Action that will retag a docker file and push it to an acr'
+inputs:
+  azure_credentials:
+    description: 'Credentials to login into registry. Only use without azure_username'
+    default: 'NULL'
+    required: false
+    type: string
+  azure_username:
+    description: 'Credentials to login into registry. Only use when azure_credentials is not set'
+    default: 'NULL'
+    required: false
+    type: string
+  azure_password:
+    description: 'Credentials to login into registry. Only use when azure_credentials is not set'
+    default: 'NULL'
+    required: false
+    type: string
+  acr_endpoint:
+    description: 'ACR endpoint'
+    required: true
+    type: string
+  docker_old_repo:
+    description: 'Repo inside the container registry to get the image from to retag'
+    required: true
+    type: string
+  docker_new_repo:
+    description: 'Repo inside the container registry to push the tagged docker'
+    required: true
+    type: string
+  docker_old_tag:
+    description: 'Old tag of the image'
+    default: 'latest'
+    required: true
+    type: string
+  docker_new_tag:
+    description: 'New tag for the image'
+    default: 'latest'
+    required: true
+    type: string
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
