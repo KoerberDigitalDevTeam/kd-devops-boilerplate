@@ -39,6 +39,21 @@ inputs:
     required: true
     default: '{}'
     type: string
+  docker_scan:
+    description: 'If the build docker should be scanned'
+    default: "false"
+    required: false
+    type: string
+  docker_trivy_image_flags:
+    description: 'Flags to pass to trivy image scan'
+    required: false
+    default: "--exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed"
+    type: string
+  docker_trivy_vulnerability_ignore:
+    description: 'Vunerability to be ignored by Trivy. Example: "CVE-2020-8911,CVE-2020-8912"'
+    default: ""
+    required: false
+    type: string
 runs:
   using: 'docker'
   image: 'Dockerfile'
