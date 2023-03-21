@@ -36,6 +36,7 @@ except:
 
 build_repo_path = acr_endpoint + '/' + build_repo
 build_complete_path = build_repo_path + ':' + build_tag
+build_complete_path = build_complete_path.lower()
 clientDocker.images.build(
         path=build_path,
         tag=build_complete_path,
@@ -67,7 +68,7 @@ else:
             registry=acr_endpoint
     )
 
-pushResponse = clientDocker.api.push(
-    repository=build_repo_path,
-    tag=build_tag,
-)
+# pushResponse = clientDocker.api.push(
+#     repository=build_repo_path,
+#     tag=build_tag,
+# )
