@@ -68,7 +68,7 @@ else:
             registry=acr_endpoint
     )
 
-# pushResponse = clientDocker.api.push(
-#     repository=build_repo_path,
-#     tag=build_tag,
-# )
+pushResponse = clientDocker.api.push(
+    repository=build_repo_path,
+    tag=build_tag,
+)
