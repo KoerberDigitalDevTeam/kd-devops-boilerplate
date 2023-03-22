@@ -56,7 +56,7 @@ if docker_scan == "true":
     for vulnerability in vulnerability_ignored:
         ignore_vun.write(vulnerability + "\n")
     ignore_vun.close()
-
+    os.system('which trivy')
     # exit_code_os = os.system('trivy image' + ' ' + docker_trivy_image_flags + ' ' + build_complete_path)
     # exit_code = exit_code_os >> 8
     # if exit_code != 00000000: 
