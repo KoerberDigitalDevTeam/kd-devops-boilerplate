@@ -13,12 +13,15 @@ except:
     docker_scan = "false"
 
 try:
-    docker_trivy_image_flags = os.environ['INPUT_DOCKER_TRIVY_IMAGE_FLAGS']
     docker_trivy_vulnerability_ignore = os.environ['INPUT_DOCKER_TRIVY_VULNERABILITY_IGNORE']
 except:
-    docker_trivy_image_flags = "--exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed"
     docker_trivy_vulnerability_ignore = ""
 
+try:
+    docker_trivy_image_flags = os.environ['INPUT_DOCKER_TRIVY_IMAGE_FLAGS']
+except:
+    docker_trivy_image_flags = "--exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed"
+    
 try:
     azure_credentials = os.environ['INPUT_AZURE_CREDENTIALS']
 except:
