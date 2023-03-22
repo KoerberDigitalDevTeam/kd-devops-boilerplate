@@ -34,6 +34,11 @@ inputs:
     default: 'latest'
     required: true
     type: string
+  dockerbuild_labs:
+    description: 'Labes for the docker buils. Type: Map'
+    required: false
+    default: '{}'
+    type: string
   dockerbuild_args:
     description: 'Args for the docker buils. Type: Map'
     required: true
