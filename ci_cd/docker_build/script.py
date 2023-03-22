@@ -61,7 +61,7 @@ if docker_scan == "true":
     # exit_code = exit_code_os >> 8
     # if exit_code != 00000000: 
     #     sys.exit('Something bad happened')
-    command = 'trivy image ' + docker_trivy_image_flags + ' ' + build_complete_path
+    command = '/usr/local/bin/trivy image ' + docker_trivy_image_flags + ' ' + build_complete_path
     p = run( command, stdout=PIPE, stderr=PIPE, text=True )
     if p.returncode != 0:
         print('Something bad happened')
