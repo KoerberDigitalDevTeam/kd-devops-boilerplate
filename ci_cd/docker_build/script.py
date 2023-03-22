@@ -90,6 +90,6 @@ else:
     )
 
 pushResponse = clientDocker.api.push(
-    repository=build_repo_path,
+    repository=build_repo_path.lower(),
     tag=build_tag,
 )
