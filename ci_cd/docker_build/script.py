@@ -57,11 +57,7 @@ if docker_scan == "true":
     # if exit_code != 00000000: 
     #     sys.exit('Something bad happened')
 
-    p = run( 
-            'trivy', \
-            'image', \
-            docker_trivy_image_flags, \
-            build_complete_path )
+    p = run( ['trivy', 'image', docker_trivy_image_flags, build_complete_path ] )
     if p.returncode != 0:
         print('Something bad happened')
 
