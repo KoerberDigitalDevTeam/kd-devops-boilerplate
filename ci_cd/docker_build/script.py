@@ -39,17 +39,16 @@ except:
 build_repo_path = acr_endpoint + '/' + build_repo
 build_complete_path = build_repo_path + ':' + build_tag
 build_complete_path = build_complete_path.lower()
-#image, build_logs = 
-clientDocker.images.build(
+image, build_logs = clientDocker.images.build(
         path=build_path,
         tag=build_complete_path,
         buildargs=json.loads(build_args),
         quiet=False
 )
-# for chuck in build_logs:
-#     if 'stream' in chuck:
-#         for line in chuck['stream'].splitlines():
-#             print(line)
+for chuck in build_logs:
+    if 'stream' in chuck:
+        for line in chuck['stream'].splitlines():
+            print(line)
 
 if docker_scan == "true":
     vulnerability_ignored = docker_trivy_vulnerability_ignore.split(",")
