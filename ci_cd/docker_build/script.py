@@ -43,12 +43,12 @@ image, build_logs = clientDocker.images.build(
         path=build_path,
         tag=build_complete_path,
         buildargs=json.loads(build_args),
-        stream=True
+        quiet=False
 )
-for chuck in build_logs:
-    if 'stream' in chuck:
-        for line in chuck['stream'].splitlines():
-            print(line)
+# for chuck in build_logs:
+#     if 'stream' in chuck:
+#         for line in chuck['stream'].splitlines():
+#             print(line)
 
 if docker_scan == "true":
     vulnerability_ignored = docker_trivy_vulnerability_ignore.split(",")
