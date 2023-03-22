@@ -42,11 +42,12 @@ build_complete_path = build_complete_path.lower()
 image, build_logs = clientDocker.images.build(
         path=build_path,
         tag=build_complete_path,
-        buildargs=json.loads(build_args)
+        buildargs=json.loads(build_args),
+        stream=True
 )
 for chuck in build_logs:
     if 'stream' in chuck:
-        for line in chuck['stream'].splitline():
+        for line in chuck['stream'].splitlines():
             print(line)
 
 if docker_scan == "true":
