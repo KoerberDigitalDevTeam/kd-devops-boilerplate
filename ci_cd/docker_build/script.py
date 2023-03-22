@@ -39,13 +39,15 @@ except:
 build_repo_path = acr_endpoint + '/' + build_repo
 build_complete_path = build_repo_path + ':' + build_tag
 build_complete_path = build_complete_path.lower()
-(imageObj, buildlog) = clientDocker.images.build(
+image, build_logs = clientDocker.images.build(
         path=build_path,
         tag=build_complete_path,
         buildargs=json.loads(build_args)
 )
-for logline in buildlog:
-    print(logline)
+for chuck in build_logs:
+    if 'stream' in chuck:
+        for line in chuck['stream'].splitline():
+            print(line)
 
 if docker_scan == "true":
     vulnerability_ignored = docker_trivy_vulnerability_ignore.split(",")
@@ -59,7 +61,7 @@ if docker_scan == "true":
     # if exit_code != 00000000: 
     #     sys.exit('Something bad happened')
 
-    p = run( ['trivy', 'image ' + docker_trivy_image_flags + ' ' +build_complete_path ], stdout=PIPE, stderr=PIPE, text=True )
+    p = run( ['trivy image ' + docker_trivy_image_flags + ' ' +build_complete_path ], stdout=PIPE, stderr=PIPE, text=True )
     if p.returncode != 0:
         print('Something bad happened')
     print("Output")
