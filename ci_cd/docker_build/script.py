@@ -53,7 +53,7 @@ if docker_scan == "true":
     exit_code = exit_code_os >> 8
     if exit_code != 00000000: 
         sys.exit('Something bad happened')
-    print("It is work")
+    print("::set-output name=output_name::It is work")
 
 if azure_credentials != "NULL" :
     credentials = json.loads(azure_credentials)
