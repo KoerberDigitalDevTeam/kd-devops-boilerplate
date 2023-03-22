@@ -21,7 +21,7 @@ try:
     docker_trivy_image_flags = os.environ['INPUT_DOCKER_TRIVY_IMAGE_FLAGS']
 except:
     docker_trivy_image_flags = "--exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed"
-    
+
 try:
     azure_credentials = os.environ['INPUT_AZURE_CREDENTIALS']
 except:
@@ -69,7 +69,7 @@ if docker_scan == "true":
     print("Exec -> " + command)
     p = run( command.split(), stdout=PIPE, stderr=PIPE, text=True )
     if p.returncode != 0:
-        print('Something bad happened')
+        print(p.stdout)
         sys.exit('Something bad happened')
     print(p.stdout)
 
