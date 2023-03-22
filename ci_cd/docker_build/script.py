@@ -57,18 +57,17 @@ if docker_scan == "true":
         ignore_vun.write(vulnerability + "\n")
     ignore_vun.close()
     os.system('which trivy')
+
     # exit_code_os = os.system('trivy image' + ' ' + docker_trivy_image_flags + ' ' + build_complete_path)
     # exit_code = exit_code_os >> 8
     # if exit_code != 00000000: 
     #     sys.exit('Something bad happened')
+
     command = '/usr/local/bin/trivy image ' + docker_trivy_image_flags + ' ' + build_complete_path
     p = run( command.split(), stdout=PIPE, stderr=PIPE, text=True )
     if p.returncode != 0:
         print('Something bad happened')
-    print("Output")
     print(p.stdout)
-    print("It is work")
-    print(p.stderr)
 
 if azure_credentials != "NULL" :
     credentials = json.loads(azure_credentials)
