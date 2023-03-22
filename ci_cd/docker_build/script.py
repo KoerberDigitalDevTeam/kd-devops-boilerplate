@@ -35,6 +35,7 @@ except:
     print("There was an error using servers docker. Please check if docker is running.")
 
 os.environ['GITHUB_OUTPUT'] = "It is work"
+print("It is work")
 
 # build_repo_path = acr_endpoint + '/' + build_repo
 # build_complete_path = build_repo_path + ':' + build_tag
