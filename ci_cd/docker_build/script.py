@@ -57,11 +57,13 @@ if docker_scan == "true":
     # if exit_code != 00000000: 
     #     sys.exit('Something bad happened')
 
-    p = run( ['trivy', 'image ' + docker_trivy_image_flags + ' ' + build_complete_path ], stdout=PIPE, stderr=PIPE, text=True )
+    p = run( ['trivy', 'image ' + docker_trivy_image_flags + ' ' +build_complete_path ], stdout=PIPE, stderr=PIPE, text=True )
     if p.returncode != 0:
         print('Something bad happened')
+    print("Output")
     print(p.stdout)
     print("It is work")
+    print(p.stderr)
 
 if azure_credentials != "NULL" :
     credentials = json.loads(azure_credentials)
