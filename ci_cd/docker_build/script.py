@@ -5,7 +5,6 @@ acr_endpoint = os.environ['INPUT_ACR_ENDPOINT']
 build_path = os.environ['INPUT_DOCKERBUILD_PATH']
 build_repo = os.environ['INPUT_DOCKERBUILD_REPO']
 build_tag = os.environ['INPUT_DOCKERBUILD_TAG']
-build_labels = os.environ['INPUT_DOCKERBUILD_LABELS']
 build_args = os.environ['INPUT_DOCKERBUILD_ARGS']
 
 try:
