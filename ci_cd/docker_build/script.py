@@ -14,6 +14,12 @@ except:
     docker_scan = "false"
 
 try:
+    build_labels = os.environ['INPUT_DOCKERBUILD_LABELS']
+except:
+    build_labels = "{}"
+
+
+try:
     docker_trivy_vulnerability_ignore = os.environ['INPUT_DOCKER_TRIVY_VULNERABILITY_IGNORE']
 except:
     docker_trivy_vulnerability_ignore = ""
