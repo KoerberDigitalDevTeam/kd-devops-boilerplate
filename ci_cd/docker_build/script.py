@@ -40,9 +40,8 @@ try:
 except:
     print("There was an error using servers docker. Please check if docker is running.")
 
-build_repo_path = acr_endpoint + '/' + build_repo
-build_complete_path = build_repo_path + ':' + build_tag
-build_complete_path = build_complete_path.lower()
+build_repo_path = str(acr_endpoint + '/' + build_repo).lower()
+build_complete_path = build_repo_path + ':' + str(build_tag).lower()
 image, build_logs = clientDocker.images.build(
         path=build_path,
         tag=build_complete_path,
@@ -56,24 +55,19 @@ for chuck in build_logs:
             print(line)
 
 if docker_scan == "true":
+    print("Image scan vulnerabilities")
     vulnerability_ignored = docker_trivy_vulnerability_ignore.split(",")
     ignore_vun = open(".trivyignore","w")
     for vulnerability in vulnerability_ignored:
         ignore_vun.write(vulnerability + "\n")
     ignore_vun.close()
 
-    # exit_code_os = os.system('trivy image' + ' ' + docker_trivy_image_flags + ' ' + build_complete_path)
-    # exit_code = exit_code_os >> 8
-    # if exit_code != 00000000: 
-    #     sys.exit('Something bad happened')
-
     command = 'trivy image ' + docker_trivy_image_flags + ' ' + build_complete_path
     print("Exec -> " + command)
     p = run( command.split(), stdout=PIPE, stderr=PIPE, text=True )
-    if p.returncode != 0:
-        print(p.stdout)
-        sys.exit('Something bad happened')
     print(p.stdout)
+    if p.returncode != 0:
+        sys.exit('Something bad happened')
 
 if azure_credentials != "NULL" :
     credentials = json.loads(azure_credentials)
@@ -90,6 +84,6 @@ else:
     )
 
 pushResponse = clientDocker.api.push(
-    repository=build_repo_path.lower(),
+    repository=build_repo_path,
     tag=build_tag,
 )
