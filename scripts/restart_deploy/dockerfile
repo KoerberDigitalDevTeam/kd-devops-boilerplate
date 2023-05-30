@@ -1,0 +1,17 @@
+FROM golang
+
+RUN mkdir /Go
+
+WORKDIR /Go 
+
+COPY ["main.go","kubernetes.go", "./"]
+
+RUN go mod init main && go get -d . && go build kubernetes.go main.go
+
+FROM alpine:latest 
+
+COPY --from=0 /Go/kubernetes /usr/local/bin/
+
+RUN apk add --no-cache libc6-compat && ln -s /lib/libc.so.6 /lib/libresolv.so.2
+
+CMD ["kubernetes"]
