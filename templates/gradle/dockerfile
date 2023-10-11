@@ -1,0 +1,14 @@
+From gradle:8.2.1-jdk11
+WORKDIR /Gradle
+
+COPY . .
+
+RUN gradle build
+
+FROM openjdk:19
+
+ENV app="app-0.0.1.jar"
+
+COPY --from=0 /Gradle/build/libs/${app} ${app}
+
+CMD java -cp ${app} com.example.App

@@ -1,0 +1,83 @@
+name: push-develop
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+env:
+  NAMESPACE: dev
+  DEPLOYMENT: example
+  SUBSCRIPTION: "111111111111111"
+
+  IMAGE_NAME: "koerberdigitaldevteam/gradle"
+  CLUSTER_NAME: example-aks
+  RESOURCE_GROUP: example_rg
+
+jobs:
+  deploy-dev:
+    runs-on: ubuntu-latest
+    needs: [build-and-test]
+
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v3.1.0
+        with:
+          ref: 'develop'
+
+      - name: Build docker and send to acr
+        uses: KoerberDigitalDevTeam/kd-devops-boilerplate/ci_cd/docker_build@v1
+        with:
+          acr_endpoint: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          azure_username: "${{ secrets.REGISTRY_USERNAME }}"
+          azure_password: "${{ secrets.REGISTRY_PASSWORD }}"
+          dockerbuild_repo: "${{ env.IMAGE_NAME }}"
+          dockerbuild_args: '{}'
+          dockerbuild_path: '.'
+          dockerbuild_tag: 'develop'
+
+      - name: Redeploy app
+        uses: KoerberDigitalDevTeam/kd-devops-boilerplate/ci_cd/azure_k8s@v1
+        with:
+          cluster_name: "${{ env.CLUSTER_NAME }}"
+          resource_group: "${{ env.RESOURCE_GROUP }}"
+          subscription: "${{ env.SUBSCRIPTION }}"
+          deploy: "${{ env.DEPLOYMENT }}"
+          namespace: "${{ env.NAMESPACE }}"
+          azure_credentials: "${{ secrets.AZURE_CREDENTIALS  }}"
+
+  deploy-stg:
+    runs-on: ubuntu-latest
+    needs: [deploy-dev]
+
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v3.1.0
+        with:
+          ref: 'master'
+
+      - name: Retag develop image
+        uses: KoerberDigitalDevTeam/kd-devops-boilerplate/ci_cd/docker_retag@v1.1
+        with:
+          acr_endpoint: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          azure_username: "${{ secrets.REGISTRY_USERNAME }}"
+          azure_password: "${{ secrets.REGISTRY_PASSWORD }}"
+          docker_old_repo: "${{ env.IMAGE_NAME }}"
+          docker_new_repo: "${{ env.IMAGE_NAME }}"
+          docker_old_tag: 'develop'
+          docker_new_tag: 'staging'
+
+      - name: Redeploy app
+        uses: KoerberDigitalDevTeam/kd-devops-boilerplate/ci_cd/azure_k8s@v1
+        with:
+          cluster_name: "${{ env.CLUSTER_NAME }}"
+          resource_group: "${{ env.RESOURCE_GROUP }}"
+          subscription: "${{ env.SUBSCRIPTION }}"
+          deploy: "${{ env.DEPLOYMENT }}"
+          namespace: "stg"
+          azure_credentials: "${{ secrets.AZURE_CREDENTIALS  }}"
+
+  build-and-test-staging:
+    needs: [ deploy-stg ]
+    uses: KoerberDigitalDevTeam/MY_REPO_NAME/.github/workflows/run_staging_tests.yml@develop
+    secrets: inherit
