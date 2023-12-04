@@ -3,6 +3,8 @@ from subprocess import run, PIPE
 
 acr_endpoint = os.environ['INPUT_ACR_ENDPOINT']
 build_path = os.environ['INPUT_DOCKERBUILD_PATH']
+build_dockerfile = os.environ['INPUT_DOCKERBUILD_FILE']
+
 build_repo = os.environ['INPUT_DOCKERBUILD_REPO']
 build_tag = os.environ['INPUT_DOCKERBUILD_TAG']
 build_args = os.environ['INPUT_DOCKERBUILD_ARGS']
@@ -39,16 +41,19 @@ try:
 except:
     azure_username = 'NULL'
     azure_password = 'NULL'
-    
+   
 try:
     clientDocker = docker.from_env()
 except:
     print("There was an error using servers docker. Please check if docker is running.")
 
+print("Hello" + build_dockerfile)
+
 build_repo_path = str(acr_endpoint + '/' + build_repo).lower()
 build_complete_path = build_repo_path + ':' + str(build_tag).lower()
 image, build_logs = clientDocker.images.build(
         path=build_path,
+        dockerfile=build_dockerfile,
         tag=build_complete_path,
         labels=json.loads(build_labels),
         buildargs=json.loads(build_args),

@@ -25,6 +25,11 @@ inputs:
     default: "."
     required: true
     type: string
+  dockerbuild_file:
+    description: 'Name for the dockerfile'
+    default: "Dockerfile"
+    required: false
+    type: string
   dockerbuild_repo:
     description: 'Repo inside the container registry'
     required: true
